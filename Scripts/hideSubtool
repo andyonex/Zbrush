@@ -1,0 +1,22 @@
+[ISubPalette,"Zplugin:zSmallTools"]
+[IButton,"Zplugin:zSmallTools:HideST","Hide Current SubTool",
+[If, [IGet, Transform:Edit],
+ [If, [SubToolGetCount] > 1,
+ //Get Right Subtool Name Routine
+ [VarSet, SubToolName, [IGetTitle,Tool:Subtool:ItemInfo]]
+ [VarSet, SubToolNameLength, [StrLength, SubToolName]]
+ [VarSet, SubToolName, [StrExtract, SubToolName,0, SubToolNameLength-2]]
+ //Get modification state
+ [VarSet, isVisible, [IModGet,[StrMerge,"Tool:SubTool:", SubToolName]]]
+ [If, isVisible > 16 ,
+  //Set Visibility mod to hidden
+  [IModSet, [StrMerge, "Tool:Subtool:",SubToolName], 1]
+  //Checking if prev subtool is avalible then select it, else next one 
+  [If,[IsEnabled,Tool:SubTool:SelectUp],
+    [IPress, Tool:SubTool:SelectUp],
+    [IPress, Tool:SubTool:SelectDown]
+  ] // if Up or Down
+ ,] // is Visible
+,] // SubtoolCount > 1
+] // Not a 3D object
+]
